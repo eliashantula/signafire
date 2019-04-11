@@ -6,7 +6,7 @@ import {changeStar} from '../actions'
 import {trashMessage} from '../actions'
 import {trashFilter} from '../actions'
 import {undeleteMessage} from '../actions'
-
+import {searchTerms} from '../actions'
 class MessagingContainer extends Component {
 
 componentDidMount(){
@@ -16,7 +16,7 @@ this.props.loadMessages()
 }
 
 render(){
-return <MessagingCard messages={this.props.messages} starred={this.props.starred} star={this.props.star} trashMessage={this.props.trashMessage}  toggleTrash={this.props.toggleTrash} trashedFilter={this.props.trashedFilter} undelete = {this.props.undelete}/>
+return <MessagingCard messages={this.props.messages} starred={this.props.starred} star={this.props.star} trashMessage={this.props.trashMessage}  toggleTrash={this.props.toggleTrash} trashedFilter={this.props.trashedFilter} undelete = {this.props.undelete} searchTerms={this.props.searchTerms} searchQuery={this.props.searchInfo}/>
 
 
 }
@@ -70,8 +70,14 @@ return {
     	dispatch(undeleteMessage(id))
 
 
-    }
-
+    },
+   
+   searchInfo: (e)=>{
+   	e.preventDefault()
+   	let data=e.target.value.split(" ")
+   	console.log(data)
+   	dispatch(searchTerms(data))
+   }
 
 	
 }
@@ -84,7 +90,8 @@ const mapStateToProps = (state) => {
 return {
 	messages: setMessages(state.messages, state.trashedFilter),
 	starred: state.starred,
-	trashedFilter: state.trashedFilter
+	trashedFilter: state.trashedFilter,
+	searchTerms: state.searchTerms
 }
 
 

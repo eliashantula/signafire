@@ -3,6 +3,7 @@ const CHANGE_STAR = 'CHANGE_STAR'
 const TRASH_MESSAGES ='TRASH_MESSAGES'
 const SET_TRASH_FILTER = 'SET_TRASH_FILTER'
 const UNDELETE_MESSAGE = 'UNDELETE_MESSAGE'
+const SEARCH_TERMS = 'SEARCH_TERMS'
 const data = require('./messages.json')
 
 
@@ -50,5 +51,12 @@ export function undeleteMessage(id){
 		type: UNDELETE_MESSAGE,
 		id
 
+	}
+}
+
+export function searchTerms(terms){
+	return {
+		type: SEARCH_TERMS,
+		terms
 	}
 }

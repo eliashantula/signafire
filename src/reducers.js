@@ -2,7 +2,8 @@ import * as Action from './actions'
 const initialState = {
 	messages:[],
 	starred: 0,
-	trashedFilter:"false"
+	trashedFilter:"false",
+	searchTerms: []
 
 }
 
@@ -85,6 +86,12 @@ messages: state.messages.map((message)=>{
 
 
 }
+case 'SEARCH_TERMS':
+	return {
+		...state,
+		searchTerms: Action.terms
+	}
+
 default: 
 return state
 }

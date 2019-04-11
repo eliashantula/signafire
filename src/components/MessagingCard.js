@@ -3,15 +3,48 @@ import logo from '../logo-sf-small.png'
 import StarButton from './starbutton'
 import Button from './button'
 import ToggleViewButton from './toggleviewbutton'
-const MessagingDetails =({individualMessage, star, trashMessage, undelete, trashFilter})=>{
+
+class MessagingDetails extends Component {
+constructor(props){
+	super(props)
+	this.state = {content:""}
+	this.textInput = React.createRef()
+}
+
+componentDidMount(){
+	
+
+	
+	console.log(this.textInput.current.textContent)   
+	this.setState({content:this.textInput.current.textContent })
+
+	
+}
+
+
+render(){
+
+const {individualMessage, star, trashMessage, undelete, trashFilter,searchTerms} = this.props
+let updatedContent = [];
+if (searchTerms.length > 0){
+ updatedContent = 
+this.state.content.split(" ").map((message)=>{
+	if (message.toLowerCase() === searchTerms[0].toLowerCase()){
+		return `<mark>${message}</mark>`
+	}
+	return message
+})
+updatedContent=updatedContent.join(" ")
+console.log(updatedContent)
+}
 
 const {handle,avatar,content,timestamp,starred,source,id, meta} = individualMessage
+
 var date = new Date(timestamp);
 var day = date.getDate();
 var year = date.getFullYear();
 var month = date.toLocaleString('en-us', { month: 'short' });
 var dateStr = month+" "+day+","+" "+year;
-console.log(trashFilter,undelete)
 return (
 <div className="individualMessage">
 <div className="userDetails">
@@ -20,7 +53,10 @@ return (
 </div>
 <div className="contentDetails">
 <div className="source" style={{fontSize: "10px", color: "grey"}}>{source} | {dateStr}</div>
-<p className="message">{content}</p>
+{updatedContent.length > 0 ? (
+<p className="message" ref={this.textInput} dangerouslySetInnerHTML={{__html: updatedContent}}></p>
+	):( <p className="message" ref={this.textInput} >{content}</p>)}
+
 </div>
 <div className="stars">
 <StarButton starred={meta.isStarred} id={id} onClick={star}/>
@@ -32,18 +68,25 @@ return (
 
 </div>
 
-)
+
+
+
+	)
+
+
+	}
 }
 
 
 
 
-const MessagingCard = ({messages, loadMessages, starred, star,trashMessage, trashedFilter, toggleTrash, undelete}) => {
+
+const MessagingCard = ({messages, loadMessages, starred, star,trashMessage, trashedFilter, toggleTrash, undelete, searchQuery,searchTerms}) => {
 
 
-const messageDataParsed = messages.map((individualMessage)=>{
+const messageDataParsed = messages.map((individualMessage, i)=>{
 
-return <MessagingDetails individualMessage= {individualMessage} star={star} trashMessage={trashMessage} trashFilter={trashedFilter} undelete={undelete} />
+return <MessagingDetails individualMessage= {individualMessage} star={star} trashMessage={trashMessage} trashFilter={trashedFilter} key={i}undelete={undelete} searchTerms={searchTerms} />
 
 	
 
@@ -61,7 +104,7 @@ return (
     </div>
     </div>
 	<h3 className="starred">Starred:{starred}</h3>
-	<ToggleViewButton toggleTrash={toggleTrash} trashedFilter={trashedFilter}/>
+	<ToggleViewButton toggleTrash={toggleTrash} trashedFilter={trashedFilter} searchQuery={searchQuery}/>
 	{messageDataParsed}
 	</div>
 
